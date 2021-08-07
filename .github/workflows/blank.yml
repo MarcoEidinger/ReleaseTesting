@@ -11,5 +11,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: View context attributes
+        uses: actions/github-script@v4
+        with:
+          script: console.log(context)      
       - name: Release
         run: echo "Release is $GITHUB_REF"
