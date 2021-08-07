@@ -1,0 +1,15 @@
+name: Test
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  Jazzy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Release
+        run: echo "Release is $GITHUB_REF"
