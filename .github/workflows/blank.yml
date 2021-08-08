@@ -32,8 +32,8 @@ jobs:
         if : github.event_name == 'release' || github.event_name == 'workflow_dispatch' &&  github.event.inputs.deploy == 'true'
         run: echo "deploy"
       - name: Upload documentation as artifact
-	if: github.event_name == 'workflow_dispatch'
-	uses: actions/upload-artifact@v1
-	with:
-          name: doc
-	  path: docs
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v1
+        with:
+          name: coverage
+          path: docs
