@@ -4,6 +4,15 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      module_version:
+        description: 'Module Version'
+        required: true
+        default: 'Latest'
+      deploy:
+        description: 'Deploy'
+        required: true
+        default: 'false'
 
 jobs:
   Jazzy:
@@ -19,3 +28,12 @@ jobs:
           result-encoding: string
       - name: Get result
         run: echo "${{steps.set-release.outputs.result}}"
+      - name: Upload documentation as artifact
+        if : github.event_name == 'release' || github.event_name == 'workflow_dispatch' &&  github.event.inputs.deploy == 'true'
+        run: echo "deploy"
+      - name: Upload documentation as artifact
+	      if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v1
+        with:
+          name: docs
+          path: docs
