@@ -21,13 +21,24 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: View context attributes
+        if: github.event_name == 'release'
         uses: actions/github-script@v4
         id: set-release
         with:
-          script: return context.payload.release.tag_name
+          run: echo context.payload.release.tag_name >> $GITHUB_ENV
           result-encoding: string
+      - name: Set MVERSION (Release)
+        if: github.event_name == 'release'
+        run: |
+          echo "MVERSION=${{ steps.set-release.outputs.result }}" >> $GITHUB_ENV
+          echo "${{ env.MVERSION }}"          
+      - name: Set MVERSION (Manual Dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "MVERSION=${{ github.event.inputs.module_version }}" >> $GITHUB_ENV
+          echo "${{ env.MVERSION }}"
       - name: Get result
-        run: echo "${{steps.set-release.outputs.result}}"
+        run: echo "${{env.MVERSION}}"
       - name: Deploy
         if : github.event_name == 'release' || github.event_name == 'workflow_dispatch' &&  github.event.inputs.deploy == 'true'
         run: echo "deploy"
